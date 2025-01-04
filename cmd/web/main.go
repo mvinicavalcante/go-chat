@@ -1,16 +1,14 @@
 package main
 
 import (
-	"fmt"
-	"strings"
+	"log"
+	"net/http"
 )
 
-func lengthOfLastWord(s string) int {
-	listOfWords := strings.Split(strings.TrimSpace(s), " ")
-	fmt.Println(listOfWords)
-	return len(listOfWords[len(listOfWords)-1])
-}
-
 func main() {
-	fmt.Println(lengthOfLastWord("   fly me   to   the moon  "))
+	mux := routes()
+
+	log.Println("Starting web server on port 8080")
+
+	_ = http.ListenAndServe(":8080", mux)
 }

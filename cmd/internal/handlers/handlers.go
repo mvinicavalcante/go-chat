@@ -1,8 +1,36 @@
 package handlers
 
-import "net/http"
+import (
+	"log"
+	"net/http"
 
-//! Lidam com requisições HTTP
+	"github.com/CloudyKit/jet/v6"
+)
+
+var views = jet.NewSet(
+	jet.NewOSFileSystemLoader("./html"),
+	jet.InDevelopmentMode(),
+)
+
+func renderPage(w http.ResponseWriter, tmpl string, data jet.VarMap) error {
+	view, err := views.GetTemplate(tmpl)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = view.Execute(w, data, nil)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
 func Home(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Olá! Bem-vindo ao nosso site!"))
+	err := renderPage(w, "home.jet", nil)
+	if err != nil {
+		log.Println(err)
+	}
 }
